@@ -26,6 +26,7 @@ jobs:
           docker build -t ci_cd:${{ github.sha }} .
 
       - name: Tag and push Docker image
+      
         run: |
           docker tag ci_cd:${{ github.sha }} tadejsevsek/ci_cd:latest
           docker push tadejsevsek/ci_cd:latest
