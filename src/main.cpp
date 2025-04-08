@@ -1,10 +1,9 @@
 #include <fstream>
 #include <vector>
 #include <cctype>
-using namespace std;
 
-bool Branje_Stevil(vector<int> &vec, const char s[]) {
-    ifstream input(s);
+bool Branje_Stevil(std::vector<int>& vec, const char s[]) {
+    std::ifstream input(s);
     int st;
 
     if (!input.is_open()) {
@@ -21,19 +20,18 @@ bool Branje_Stevil(vector<int> &vec, const char s[]) {
 }
 
 void Izpis_Stevil(int* polje, unsigned int velikost) {
-    ofstream output("out.txt");
+    std::ofstream output("out.txt");
 
     for (int i = 0; i < velikost; i++)
         output << polje[i] << ' ';
 }
 
-int main(int argc, const char* argv[]) {
-    vector<int> A;
+void runProgram(const char* algoFlag, const char* inputFile) {
+    std::vector<int> A;
 
-    if (argc < 3) return 0;
-    if (!Branje_Stevil(A, argv[2])) return 0;
+    if (!Branje_Stevil(A, inputFile)) return;
 
-    if (argv[1][0] == '0') {
+    if (algoFlag[0] == '0') {
         int min = A[0];
         int max = A[0];
 
@@ -98,6 +96,10 @@ int main(int argc, const char* argv[]) {
         }
         Izpis_Stevil(B, A.size());
     }
-    
+}
+
+int main(int argc, const char* argv[]) {
+    if (argc < 3) return 0;
+    runProgram(argv[1], argv[2]);
     return 0;
 }

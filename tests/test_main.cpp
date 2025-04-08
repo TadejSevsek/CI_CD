@@ -6,6 +6,7 @@
 
 extern bool Branje_Stevil(std::vector<int>& vec, const char s[]);
 extern void Izpis_Stevil(int* polje, unsigned int velikost);
+extern void runProgram(const char* algoFlag, const char* inputFile); 
 
 void testAlgorithm(const char* algoFlag, const char* inputFile, const char* expectedOutputFile) {
     std::vector<int> vec;
@@ -16,20 +17,19 @@ void testAlgorithm(const char* algoFlag, const char* inputFile, const char* expe
         arr[i] = vec[i];
     }
 
-    // preusmerimo v začasni izpis zaradi prglednosti
+    // preusmerimo izhod v datoteko
     std::string tempOutput = "temp_output.txt";
     std::ofstream tempStream(tempOutput);
     std::streambuf* oldCout = std::cout.rdbuf(tempStream.rdbuf());
 
-    // pokliče program z parametri
-    char* args[] = {const_cast<char*>("program"), const_cast<char*>(algoFlag), const_cast<char*>(inputFile)};
-    main(3, args);
+    // zaženi program
+    runProgram(algoFlag, inputFile);
 
-    // vrnemo nazaj na standerden izpis
+    // nastavi nazaj na stdout 
     std::cout.rdbuf(oldCout);
     tempStream.close();
 
-    // primerja pridobljen izpis z pričakovanim
+    // Cprimerjamo izhod
     std::ifstream tempOut(tempOutput);
     std::ifstream expectedOut(expectedOutputFile);
 
@@ -38,7 +38,7 @@ void testAlgorithm(const char* algoFlag, const char* inputFile, const char* expe
         assert(tempLine == expectedLine);
     }
 
-    // pobrišemo pointer
+    // počisti
     delete[] arr;
 }
 
