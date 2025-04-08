@@ -98,8 +98,10 @@ void runProgram(const char* algoFlag, const char* inputFile) {
     }
 }
 
+#ifndef TESTING //main, samo če ne testiramo
 int main(int argc, const char* argv[]) {
     if (argc < 3) return 0;
     runProgram(argv[1], argv[2]);
     return 0;
 }
+#endif

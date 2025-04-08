@@ -68,5 +68,5 @@ jobs:
       #in jih tudi izvede
       - name: Compile and run tests
         run: |
-          g++ -std=c++17 -o test_runner tests/test_main.cpp src/main.cpp
+          g++ -std=c++17 -DTESTING -o test_runner tests/test_main.cpp src/main.cpp
           ./test_runner ${{ matrix.algorithm.flag }} ${{ matrix.algorithm.input }} ${{ matrix.algorithm.expected }}
