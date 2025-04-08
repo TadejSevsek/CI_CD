@@ -23,9 +23,9 @@ jobs:
 
       - name: Build Docker image
         run: |
-          docker build -t testing:${{ github.sha }} .
+          docker build -t ci_cd:${{ github.sha }} .
 
       - name: Tag and push Docker image
         run: |
-          docker tag testing:${{ github.sha }} tadejsevsek/testing:latest
-          docker push tadejsevsek/testing:latest
+          docker tag ci_cd:${{ github.sha }} tadejsevsek/ci_cd:latest
+          docker push tadejsevsek/ci_cd:latest
