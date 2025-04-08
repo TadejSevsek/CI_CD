@@ -1,0 +1,65 @@
+name: 28580_test
+#izvede se ko se izvede push na main
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  check-tests:
+    runs-on: self-hosted #pove da se bo ta posel izvajal na našem runnerju
+    steps:
+      #pulla code na runnerja 
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Check for test scripts
+        id: check_tests
+        #preveri če test obstaja, če ne vrne napako v napaka.txt
+        run: |
+          if [ ! -d "tests" ]; then
+            echo "Test directory not found!" >&2
+            echo "Error details" > napaka.txt
+            exit 1
+          fi
+        continue-on-error: true
+
+      - name: Upload error file as artifact
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: error-file
+          path: napaka.txt
+
+  run-tests:
+    runs-on: self-hosted
+    needs: check-tests #pove da potrebuje da se prvi posel zvede da se zagna
+    strategy:
+      matrix: #uporabim matriko za izvajanje obeh algoritmov 
+        algorithm:
+          - { flag: "0", input: "tests/input_algo_0.txt", expected: "tests/expected_output_algo_0.txt" }
+          - { flag: "1", input: "tests/input_algo_1.txt", expected: "tests/expected_output_algo_1.txt" }
+    steps:
+      #pridobi artifact iz prejšnjega posla
+      - name: Download error file
+        uses: actions/download-artifact@v4
+        with:
+          name: error-file
+          path: .
+      #ga peveri. in če je napaka prekine workflow
+      - name: Check error file content
+        run: |
+          if grep -q "Error details" napaka.txt; then
+            echo "Tests failed due to missing test directory."
+            exit 1
+          fi
+        #pripravimo runnerja da bo lahko izvedel teste
+      - name: Setup environment
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y g++ make
+      #in jih tudi izvede
+      - name: Compile and run tests
+        run: |
+          g++ -std=c++17 -o test_runner tests/test_main.cpp src/main.cpp
+          ./test_runner ${{ matrix.algorithm.flag }} ${{ matrix.algorithm.input }} ${{ matrix.algorithm.expected }}
