@@ -33,7 +33,7 @@ jobs:
 
   run-tests:
     runs-on: self-hosted
-    needs: check-tests #pove da potrebuje da se prvi posel zvede da se zagna
+    needs: check-tests #pove da potrebuje da se prvi posel izvede da se zagna
     strategy:
       matrix: #uporabim matriko za izvajanje obeh algoritmov 
         algorithm:
