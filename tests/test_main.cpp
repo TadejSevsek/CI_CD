@@ -29,7 +29,7 @@ void testAlgorithm(const char* algoFlag, const char* inputFile, const char* expe
     std::cout.rdbuf(oldCout);
     tempStream.close();
 
-    // Cprimerjamo izhod
+    // primerjamo izhod
     std::ifstream tempOut(tempOutput);
     std::ifstream expectedOut(expectedOutputFile);
 
