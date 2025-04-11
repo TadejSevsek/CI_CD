@@ -6,7 +6,7 @@
 
 extern bool Branje_Stevil(std::vector<int>& vec, const char s[]);
 extern void Izpis_Stevil(int* polje, unsigned int velikost);
-extern void runProgram(const char* algoFlag, const char* inputFile); 
+extern void runProgram(const char* algoFlag, const char* inputFile);  //"main" funckija main.cpp
 
 void testAlgorithm(const char* algoFlag, const char* inputFile, const char* expectedOutputFile) {
     std::vector<int> vec;
