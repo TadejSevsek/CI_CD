@@ -1,32 +1,33 @@
 name: 28580_deploy
-#izvede se le ko se test uspesno izvede 
+
 on:
   workflow_run:
     workflows: ["28580_test"]
     types:
       - completed
 
- 
-  
-
 jobs:
   build-and-deploy:
-    runs-on: self-hosted 
+    runs-on: self-hosted
+    if: github.event.workflow_run.conclusion == 'success' # Ensure the test workflow succeeded [[9]]
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-        #se prijavi v docer hub
+
+      - name: Debug Docker Username
+        run: echo "Docker Username: ${{ secrets.DOCKER_USERNAME }}"
+
       - name: Login to Docker Hub
         run: |
           echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
-      
 
       - name: Build Docker image
         run: |
           docker build -t ci_cd:${{ github.sha }} .
 
       - name: Tag and push Docker image
-      
         run: |
           docker tag ci_cd:${{ github.sha }} tadejsevsek/ci_cd:latest
+          docker tag ci_cd:${{ github.sha }} tadejsevsek/ci_cd:v1.0
           docker push tadejsevsek/ci_cd:latest
+          docker push tadejsevsek/ci_cd:v1.0
