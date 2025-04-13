@@ -9,7 +9,7 @@ on:
 jobs:
   build-and-deploy:
     runs-on: self-hosted
-    if: github.event.workflow_run.conclusion == 'success' # Ensure the test workflow succeeded [[9]]
+    if: github.event.workflow_run.conclusion == 'success' # prej se je zagnal tudi če je test padel, zdaj se zažene samo če je uspel 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
