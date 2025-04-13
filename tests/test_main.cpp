@@ -55,4 +55,5 @@ int main(int argc, char* argv[]) {
     testAlgorithm(algoFlag, inputFile, expectedOutputFile);
 
     return 0;
+    
 }
